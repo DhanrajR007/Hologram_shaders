@@ -1,20 +1,20 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import GUI from "lil-gui";
+import vertexShader from "./shaders/hologram/vertex.glsl";
+import fragmentShader from "./shaders/hologram/fragment.glsl";
 
 const gui = new GUI();
 const canvas = document.querySelector("#canvas");
 const scene = new THREE.Scene();
 
 const geometry = new THREE.SphereGeometry(1, 32, 32);
-const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const material = new THREE.ShaderMaterial({
+  vertexShader: vertexShader,
+  fragmentShader: fragmentShader,
+});
 const sphere = new THREE.Mesh(geometry, material);
-``;
 scene.add(sphere);
-
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(1, 1, 2);
-scene.add(light, new THREE.AmbientLight(0xffffff, 0.5));
 
 const sizes = {
   width: window.innerWidth,
