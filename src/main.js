@@ -12,6 +12,10 @@ const geometry = new THREE.SphereGeometry(1, 32, 32);
 const material = new THREE.ShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
+  transparent: true,
+  uniforms: {
+    uTime: new THREE.Uniform(0),
+  },
 });
 const sphere = new THREE.Mesh(geometry, material);
 scene.add(sphere);
@@ -57,7 +61,12 @@ gui.addColor(debugObject, "backgroundColor").onChange(() => {
   scene.background.set(debugObject.backgroundColor);
 });
 
+const clock = new THREE.Clock();
+
 const tick = () => {
+  const elapsedTime = clock.getElapsedTime();
+  material.uniforms.uTime.value = elapsedTime;
+  sphere.rotation.x += 0.0001;
   controls.update();
   renderer.render(scene, camera);
   window.requestAnimationFrame(tick);
