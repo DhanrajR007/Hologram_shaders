@@ -8,6 +8,8 @@ void main() {
     vec4 projectionPosition = projectionMatrix * viewPosition;
 
     gl_Position = projectionPosition;
+
+    vec4 modelNormal = modelMatrix * vec4(normal, 0.0);
     vPosition = modelPosition.xyz;
-    vNormal =  normal;
+    vNormal = modelNormal.xyz;
 }   

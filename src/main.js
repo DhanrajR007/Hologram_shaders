@@ -8,13 +8,30 @@ const gui = new GUI();
 const canvas = document.querySelector("#canvas");
 const scene = new THREE.Scene();
 
-const geometry = new THREE.SphereGeometry(1, 32, 32);
+const debugObject = {
+  backgroundColor: "#000000",
+  color: "#ff0000",
+};
+
+scene.background = new THREE.Color(debugObject.backgroundColor);
+gui.addColor(debugObject, "backgroundColor").onChange(() => {
+  scene.background.set(debugObject.backgroundColor);
+});
+gui.addColor(debugObject, "color").onChange(() => {
+  material.uniforms.uColor.value.set(debugObject.color);
+});
+
+const geometry = new THREE.SphereGeometry(1, 128, 128);
 const material = new THREE.ShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
   transparent: true,
   uniforms: {
     uTime: new THREE.Uniform(0),
+    uColor: new THREE.Uniform(new THREE.Color(debugObject.color)),
   },
 });
 const sphere = new THREE.Mesh(geometry, material);
@@ -50,15 +67,6 @@ window.addEventListener("resize", () => {
 
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
-const debugObject = {
-  backgroundColor: "#000000",
-};
-
-scene.background = new THREE.Color(debugObject.backgroundColor);
-
-gui.addColor(debugObject, "backgroundColor").onChange(() => {
-  scene.background.set(debugObject.backgroundColor);
 });
 
 const clock = new THREE.Clock();
